@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">My Restaurant Review</string>
+    <string name="restaurant">Restaurant</string>
+    <string name="city">City</string>
+    <string name="review">Review</string>
+    <string name="write">Write You Review Here…</string>
+    <string name="description">Description</string>
+    <string name="send">Send</string>
+</resources>
