@@ -2,6 +2,7 @@ package com.example.myrestaurantreview.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import com.example.myrestaurantreview.data.model.PostReviewResponse
 import com.example.myrestaurantreview.data.model.RestaurantDetailResponse
 import com.example.myrestaurantreview.data.model.RestaurantResponse
 import com.example.myrestaurantreview.data.network.ApiServices
@@ -26,6 +27,17 @@ class RestaurantRepository private constructor(
             emit(Result.Loading)
             try {
                 val response = apiServices.getRestaurantDetail(id)
+                emit(Result.Success(response))
+            } catch (e: Exception) {
+                emit(Result.Error(e.message.toString()))
+            }
+        }
+
+    fun postReview(id: String, name: String, review: String): LiveData<Result<PostReviewResponse>> =
+        liveData(Dispatchers.IO) {
+            emit(Result.Loading)
+            try {
+                val response = apiServices.postReview(id, name, review)
                 emit(Result.Success(response))
             } catch (e: Exception) {
                 emit(Result.Error(e.message.toString()))

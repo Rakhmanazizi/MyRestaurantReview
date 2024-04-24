@@ -1,10 +1,13 @@
 package com.example.myrestaurantreview.ui.detail
 
+import android.content.Context
+import android.inputmethodservice.InputMethodService
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -59,6 +62,31 @@ class DetailActivity : AppCompatActivity() {
                         setRestaurantDetail(result.data.restaurant)
                         setRestaurantReview(result.data.restaurant?.customerReviews)
                     }
+                }
+            }
+            binding.btnSend.setOnClickListener {
+                val review = binding.edReview.text.toString()
+                postReview(id, "Farhan", review)
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(it.windowToken, 0)
+            }
+        }
+    }
+
+    private fun postReview(id: String, name: String, review: String) {
+        detailViewModel.postReview(id, name, review).observe(this) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    showLoading(true)
+                }
+
+                is Result.Error -> {
+                    showLoading(false)
+                }
+
+                is Result.Success -> {
+                    showLoading(false)
+                    setRestaurantReview(result.data.customerReviews)
                 }
             }
         }
